@@ -4,7 +4,7 @@ Base Spark is a mobile-first Base mini app built with Next.js, TypeScript, App R
 
 ## Concept
 
-Users tap one main button to claim an instant visible reward called Sparks. The first reward appears immediately without requiring a token purchase. If a contract address is configured and the user connects a wallet, the same action can also write an attribution-ready transaction on Base.
+Users tap one main button to claim an instant visible reward called Sparks. The reward appears after the connected wallet signs a free verification message, without requiring a token purchase. If a contract address is configured, the same action can also write an attribution-ready transaction on Base.
 
 ## Wallets
 
