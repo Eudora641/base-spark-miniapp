@@ -15,12 +15,10 @@ import {
   useAccount,
   useConnect,
   useDisconnect,
-  useSignMessage,
   useSwitchChain,
   useWriteContract,
 } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { verifyMessage } from 'viem';
 import { HAS_CONTRACT, SPARK_REWARD_ABI, SPARK_REWARD_CONTRACT } from '@/lib/contract';
 import { ATTRIBUTION_DATA_SUFFIX } from '@/lib/wagmi';
 
@@ -49,13 +47,12 @@ export function RewardExperience() {
   const [points, setPoints] = useState(0);
   const [streak, setStreak] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
-  const [message, setMessage] = useState('Connect a wallet, then sign a free message to claim your first reward.');
+  const [message, setMessage] = useState('Connect a wallet, then confirm the onchain claim to unlock your reward.');
   const [hasClaimed, setHasClaimed] = useState(false);
 
   const { address, chainId, isConnected } = useAccount();
   const { connectors, connect, isPending: isConnecting } = useConnect();
   const { disconnect } = useDisconnect();
-  const { signMessageAsync, isPending: isSigning } = useSignMessage();
   const { switchChainAsync } = useSwitchChain();
   const { writeContractAsync, isPending: isWriting } = useWriteContract();
 
@@ -64,7 +61,7 @@ export function RewardExperience() {
       setPoints(0);
       setStreak(0);
       setHasClaimed(false);
-      setMessage('Connect a wallet, then sign a free message to claim your first reward.');
+      setMessage('Connect a wallet, then confirm the onchain claim to unlock your reward.');
       return;
     }
 
@@ -76,9 +73,9 @@ export function RewardExperience() {
     setStreak(savedStreak);
     setHasClaimed(savedClaim);
     if (savedClaim) {
-      setMessage('Your signed reward is active. Come back tomorrow to grow the streak.');
+      setMessage('Your onchain reward is active. Come back tomorrow to grow the streak.');
     } else {
-      setMessage('Sign a free wallet message to verify this claim and unlock the reward.');
+      setMessage('Confirm the smart contract transaction to claim today\'s reward.');
     }
   }, [address]);
 
@@ -94,51 +91,25 @@ export function RewardExperience() {
     }
 
     if (!isConnected || !address) {
-      setMessage('Choose a wallet first. The reward unlocks only after your signature is verified.');
+      setMessage('Choose a wallet first. The reward unlocks only after the smart contract transaction is signed.');
       setModalOpen(true);
       return;
     }
 
+    if (!HAS_CONTRACT) {
+      setMessage('Smart contract address is missing. Set NEXT_PUBLIC_CONTRACT_ADDRESS before claiming.');
+      return;
+    }
+
     const today = claimDate();
-    const claimMessage = [
-      'Base Spark reward claim',
-      `Wallet: ${address}`,
-      `Reward: ${DAILY_REWARD} Sparks`,
-      `Date: ${today}`,
-      'This signature is free and only verifies reward ownership.',
-    ].join('\n');
 
     try {
-      setMessage('Waiting for wallet signature...');
-      const signature = await signMessageAsync({ message: claimMessage });
-      const verified = await verifyMessage({
-        address,
-        message: claimMessage,
-        signature,
-      });
-
-      if (!verified) {
-        setMessage('Signature verification failed. No reward was claimed.');
-        return;
-      }
-
-      const nextPoints = points + DAILY_REWARD;
-      const nextStreak = streak + 1;
-      setPoints(nextPoints);
-      setStreak(nextStreak);
-      setHasClaimed(true);
-      window.localStorage.setItem(storageKey(address, 'points'), String(nextPoints));
-      window.localStorage.setItem(storageKey(address, 'streak'), String(nextStreak));
-      window.localStorage.setItem(storageKey(address, `claimed:${today}`), 'true');
-      window.localStorage.setItem(storageKey(address, `signature:${today}`), signature);
-      setMessage('Signature verified. Reward unlocked.');
-
-      if (!HAS_CONTRACT) return;
-
       if (chainId !== base.id) {
+        setMessage('Switching to Base...');
         await switchChainAsync({ chainId: base.id });
       }
 
+      setMessage('Waiting for smart contract confirmation in your wallet...');
       const hash = await writeContractAsync({
         address: SPARK_REWARD_CONTRACT,
         abi: SPARK_REWARD_ABI,
@@ -148,9 +119,18 @@ export function RewardExperience() {
         dataSuffix: ATTRIBUTION_DATA_SUFFIX,
       });
 
-      setMessage(`Reward saved onchain: ${shortHash(hash)}`);
+      const nextPoints = points + DAILY_REWARD;
+      const nextStreak = streak + 1;
+      setPoints(nextPoints);
+      setStreak(nextStreak);
+      setHasClaimed(true);
+      window.localStorage.setItem(storageKey(address, 'points'), String(nextPoints));
+      window.localStorage.setItem(storageKey(address, 'streak'), String(nextStreak));
+      window.localStorage.setItem(storageKey(address, `claimed:${today}`), 'true');
+      window.localStorage.setItem(storageKey(address, `tx:${today}`), hash);
+      setMessage(`Onchain claim submitted: ${shortHash(hash)}`);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'The signature was not completed.');
+      setMessage(error instanceof Error ? error.message : 'The onchain claim was not completed.');
     }
   }
 
@@ -180,8 +160,8 @@ export function RewardExperience() {
           </div>
           <h1 className="title">Claim a warm daily spark.</h1>
           <p className="lead">
-            Connect a wallet and sign a free message to unlock an instant visible reward.
-            Optional onchain saving uses Base attribution-ready calldata.
+            Connect a wallet and confirm the smart contract transaction to unlock an
+            instant visible reward with Base attribution-ready calldata.
           </p>
 
           <div className="stats-row">
@@ -204,7 +184,7 @@ export function RewardExperience() {
             <div className="meter-copy">
               <div className="meter-label">Today&apos;s reward</div>
               <div className="meter-value">+{DAILY_REWARD}</div>
-              <div className="meter-note">Unlocked after signature</div>
+              <div className="meter-note">Unlocked after onchain claim</div>
             </div>
           </div>
 
@@ -212,10 +192,10 @@ export function RewardExperience() {
             className="primary-button"
             type="button"
             onClick={handleClaim}
-            disabled={isSigning || isWriting}
+            disabled={isWriting}
           >
             <Flame size={20} />
-            {hasClaimed ? 'Reward Claimed' : isConnected ? 'Sign to Claim' : 'Connect to Claim'}
+            {hasClaimed ? 'Reward Claimed' : isConnected ? 'Claim Onchain' : 'Connect to Claim'}
           </button>
 
           <p className="status">
