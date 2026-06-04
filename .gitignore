@@ -7,3 +7,5 @@ dist
 *.tsbuildinfo
 vite-dev.*.log
 next-dev.*.log
+
+.vercel
