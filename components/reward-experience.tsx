@@ -4,9 +4,12 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   BadgeCheck,
   ChevronRight,
+  ExternalLink,
+  FileText,
   Flame,
   Gift,
   PlugZap,
+  RefreshCcw,
   Sparkles,
   Wallet,
   X,
@@ -15,7 +18,9 @@ import {
   useAccount,
   useConnect,
   useDisconnect,
+  useReadContract,
   useSwitchChain,
+  useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi';
 import { base } from 'wagmi/chains';
@@ -26,6 +31,10 @@ const DAILY_REWARD = 25;
 
 function shortHash(value: string) {
   return `${value.slice(0, 6)}...${value.slice(-4)}`;
+}
+
+function baseScanUrl(path: string) {
+  return `https://basescan.org/${path}`;
 }
 
 function connectorLabel(name: string) {
@@ -49,18 +58,41 @@ export function RewardExperience() {
   const [modalOpen, setModalOpen] = useState(false);
   const [message, setMessage] = useState('Connect a wallet, then confirm the onchain claim to unlock your reward.');
   const [hasClaimed, setHasClaimed] = useState(false);
+  const [lastTxHash, setLastTxHash] = useState<`0x${string}` | undefined>();
 
   const { address, chainId, isConnected } = useAccount();
   const { connectors, connect, isPending: isConnecting } = useConnect();
   const { disconnect } = useDisconnect();
   const { switchChainAsync } = useSwitchChain();
   const { writeContractAsync, isPending: isWriting } = useWriteContract();
+  const {
+    data: onchainClaimCount,
+    isLoading: isReadingClaims,
+    refetch: refetchClaimCount,
+  } = useReadContract({
+    address: SPARK_REWARD_CONTRACT,
+    abi: SPARK_REWARD_ABI,
+    functionName: 'claimCount',
+    args: address ? [address] : undefined,
+    chainId: base.id,
+    query: {
+      enabled: HAS_CONTRACT && Boolean(address),
+    },
+  });
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    chainId: base.id,
+    hash: lastTxHash,
+    query: {
+      enabled: Boolean(lastTxHash),
+    },
+  });
 
   useEffect(() => {
     if (!address) {
       setPoints(0);
       setStreak(0);
       setHasClaimed(false);
+      setLastTxHash(undefined);
       setMessage('Connect a wallet, then confirm the onchain claim to unlock your reward.');
       return;
     }
@@ -69,9 +101,11 @@ export function RewardExperience() {
     const savedPoints = Number(window.localStorage.getItem(storageKey(address, 'points')) || 0);
     const savedStreak = Number(window.localStorage.getItem(storageKey(address, 'streak')) || 0);
     const savedClaim = window.localStorage.getItem(storageKey(address, `claimed:${today}`)) === 'true';
+    const savedTx = window.localStorage.getItem(storageKey(address, `tx:${today}`)) as `0x${string}` | null;
     setPoints(savedPoints);
     setStreak(savedStreak);
     setHasClaimed(savedClaim);
+    setLastTxHash(savedTx && /^0x[a-fA-F0-9]+$/.test(savedTx) ? savedTx : undefined);
     if (savedClaim) {
       setMessage('Your onchain reward is active. Come back tomorrow to grow the streak.');
     } else {
@@ -79,10 +113,21 @@ export function RewardExperience() {
     }
   }, [address]);
 
+  useEffect(() => {
+    if (!isConfirmed || !lastTxHash) return;
+    void refetchClaimCount();
+    setMessage(`Onchain claim confirmed: ${shortHash(lastTxHash)}`);
+  }, [isConfirmed, lastTxHash, refetchClaimCount]);
+
   const walletText = useMemo(() => {
     if (address) return shortHash(address);
     return 'Connect';
   }, [address]);
+
+  const chainText = useMemo(() => {
+    if (!isConnected) return 'Wallet not connected';
+    return chainId === base.id ? 'Base Mainnet' : `Wrong network (${chainId ?? 'unknown'})`;
+  }, [chainId, isConnected]);
 
   async function handleClaim() {
     if (hasClaimed) {
@@ -118,6 +163,7 @@ export function RewardExperience() {
         chainId: base.id,
         dataSuffix: ATTRIBUTION_DATA_SUFFIX,
       });
+      setLastTxHash(hash);
 
       const nextPoints = points + DAILY_REWARD;
       const nextStreak = streak + 1;
@@ -128,7 +174,7 @@ export function RewardExperience() {
       window.localStorage.setItem(storageKey(address, 'streak'), String(nextStreak));
       window.localStorage.setItem(storageKey(address, `claimed:${today}`), 'true');
       window.localStorage.setItem(storageKey(address, `tx:${today}`), hash);
-      setMessage(`Onchain claim submitted: ${shortHash(hash)}`);
+      setMessage(`Onchain claim submitted: ${shortHash(hash)}. Waiting for confirmation...`);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'The onchain claim was not completed.');
     }
@@ -192,15 +238,69 @@ export function RewardExperience() {
             className="primary-button"
             type="button"
             onClick={handleClaim}
-            disabled={isWriting}
+            disabled={isWriting || isConfirming}
           >
             <Flame size={20} />
-            {hasClaimed ? 'Reward Claimed' : isConnected ? 'Claim Onchain' : 'Connect to Claim'}
+            {isConfirming ? 'Confirming...' : hasClaimed ? 'Reward Claimed' : isConnected ? 'Claim Onchain' : 'Connect to Claim'}
           </button>
 
           <p className="status">
             <strong>Status:</strong> {message}
           </p>
+        </div>
+      </section>
+
+      <section className="contract-panel" aria-label="Contract interaction">
+        <div className="panel-head">
+          <div>
+            <h2 className="panel-title">Contract interaction</h2>
+            <p className="panel-copy">Read the connected wallet&apos;s claim count and inspect the latest write transaction.</p>
+          </div>
+          <button
+            className="icon-button"
+            type="button"
+            onClick={() => void refetchClaimCount()}
+            disabled={!HAS_CONTRACT || !address || isReadingClaims}
+            aria-label="Refresh onchain claim count"
+          >
+            <RefreshCcw size={17} />
+          </button>
+        </div>
+
+        <div className="contract-grid">
+          <div className="contract-item">
+            <span className="contract-label">Network</span>
+            <span className="contract-value">{chainText}</span>
+          </div>
+          <div className="contract-item">
+            <span className="contract-label">Claim count</span>
+            <span className="contract-value">
+              {!address ? 'Connect wallet' : isReadingClaims ? 'Loading...' : String(onchainClaimCount ?? 0)}
+            </span>
+          </div>
+          <div className="contract-item">
+            <span className="contract-label">Contract</span>
+            {HAS_CONTRACT ? (
+              <a className="contract-link" href={baseScanUrl(`address/${SPARK_REWARD_CONTRACT}`)} target="_blank" rel="noreferrer">
+                <FileText size={15} />
+                {shortHash(SPARK_REWARD_CONTRACT)}
+                <ExternalLink size={14} />
+              </a>
+            ) : (
+              <span className="contract-value warning">Missing env address</span>
+            )}
+          </div>
+          <div className="contract-item">
+            <span className="contract-label">Latest tx</span>
+            {lastTxHash ? (
+              <a className="contract-link" href={baseScanUrl(`tx/${lastTxHash}`)} target="_blank" rel="noreferrer">
+                {shortHash(lastTxHash)}
+                <ExternalLink size={14} />
+              </a>
+            ) : (
+              <span className="contract-value">No transaction yet</span>
+            )}
+          </div>
         </div>
       </section>
 

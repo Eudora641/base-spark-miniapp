@@ -129,6 +129,7 @@ button:disabled {
 
 .reward-card,
 .action-card,
+.contract-panel,
 .info-card,
 .modal-panel {
   border: 1px solid var(--line);
@@ -274,6 +275,82 @@ button:disabled {
   color: var(--ink);
 }
 
+.contract-panel {
+  margin-top: 14px;
+  padding: 16px;
+}
+
+.panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 950;
+}
+
+.panel-copy {
+  max-width: 620px;
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.contract-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.contract-item {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid rgba(47, 143, 115, 0.14);
+  border-radius: 8px;
+  background: rgba(244, 255, 250, 0.68);
+}
+
+.contract-label {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.contract-value,
+.contract-link {
+  display: flex;
+  min-height: 24px;
+  align-items: center;
+  gap: 7px;
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.contract-link {
+  width: fit-content;
+  max-width: 100%;
+  color: #1f6d58;
+  text-decoration: none;
+}
+
+.contract-link:hover {
+  text-decoration: underline;
+}
+
+.warning {
+  color: #a4451f;
+}
+
 .info-grid {
   display: grid;
   gap: 10px;
@@ -409,6 +486,14 @@ button:disabled {
 
   .info-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .contract-panel {
+    padding: 20px;
+  }
+
+  .contract-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .modal-backdrop {

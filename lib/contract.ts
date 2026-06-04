@@ -1,5 +1,8 @@
 import type { Address } from 'viem';
 
+export const DEFAULT_SPARK_REWARD_CONTRACT =
+  '0x7a28D52c770A0597B08B175dC853A82D4D610B68' as Address;
+
 export const SPARK_REWARD_ABI = [
   {
     type: 'function',
@@ -27,7 +30,7 @@ export const SPARK_REWARD_ABI = [
 ] as const;
 
 export const SPARK_REWARD_CONTRACT =
-  (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || '') as Address;
+  (process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || DEFAULT_SPARK_REWARD_CONTRACT) as Address;
 
 export const HAS_CONTRACT =
   /^0x[a-fA-F0-9]{40}$/.test(SPARK_REWARD_CONTRACT);
