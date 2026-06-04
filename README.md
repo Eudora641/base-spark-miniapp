@@ -28,7 +28,8 @@ Offchain attribution is hardcoded in `app/layout.tsx`:
 Onchain attribution is centralized in `lib/wagmi.ts`:
 
 ```ts
-export const ATTRIBUTION_DATA_SUFFIX = '0x' as `0x${string}`;
+export const ATTRIBUTION_DATA_SUFFIX =
+  '0x62635f6d706b74757765610b0080218021802180218021802180218021' as `0x${string}`;
 ```
 
 Every contract write must pass:
@@ -37,7 +38,7 @@ Every contract write must pass:
 dataSuffix: ATTRIBUTION_DATA_SUFFIX
 ```
 
-After base.dev verification, replace the empty `0x` suffix with the encoded builder code, then redeploy so onchain activity appears in the base.dev Dashboard.
+The current builder code is `bc_mpktuwea`. This suffix is passed to the contract write call so onchain activity can appear in the base.dev Dashboard after users interact with the claim contract.
 
 ## Environment
 
@@ -73,4 +74,4 @@ The contract is deployed at `0x7a28D52c770A0597B08B175dC853A82D4D610B68`. The so
 
 To push and deploy from this machine, provide:
 
-- base.dev builder code encoded as a hex data suffix
+- Keep the base.dev builder code in `lib/wagmi.ts` aligned with the verified app registration

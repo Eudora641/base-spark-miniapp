@@ -7,7 +7,7 @@ import { createConfig, createConnector, http, injected } from 'wagmi';
 export const APP_NAME = 'Base Spark';
 
 export const ATTRIBUTION_DATA_SUFFIX =
-  '0x' as `0x${string}`;
+  '0x62635f6d706b74757765610b0080218021802180218021802180218021' as `0x${string}`;
 
 function coinbaseWalletConnector() {
   let provider: ProviderInterface | undefined;

@@ -261,14 +261,20 @@ button:disabled {
 }
 
 .status {
+  display: -webkit-box;
+  overflow: hidden;
   min-height: 42px;
+  max-height: 58px;
   margin: 0;
   padding: 10px 12px;
   border-radius: 8px;
   background: rgba(255, 246, 231, 0.72);
   color: var(--muted);
   font-size: 13px;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .status strong {

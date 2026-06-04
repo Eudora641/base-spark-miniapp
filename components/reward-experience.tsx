@@ -37,6 +37,24 @@ function baseScanUrl(path: string) {
   return `https://basescan.org/${path}`;
 }
 
+function claimErrorMessage(error: unknown) {
+  const fallback = 'The onchain claim was not completed.';
+  if (!(error instanceof Error)) return fallback;
+
+  const lowerMessage = error.message.toLowerCase();
+  if (
+    lowerMessage.includes('user rejected') ||
+    lowerMessage.includes('user denied') ||
+    lowerMessage.includes('rejected the request') ||
+    lowerMessage.includes('request rejected') ||
+    lowerMessage.includes('4001')
+  ) {
+    return 'Claim canceled in wallet.';
+  }
+
+  return error.message || fallback;
+}
+
 function connectorLabel(name: string) {
   const lower = name.toLowerCase();
   if (lower.includes('coinbase')) return 'Coinbase Wallet';
@@ -176,7 +194,7 @@ export function RewardExperience() {
       window.localStorage.setItem(storageKey(address, `tx:${today}`), hash);
       setMessage(`Onchain claim submitted: ${shortHash(hash)}. Waiting for confirmation...`);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'The onchain claim was not completed.');
+      setMessage(claimErrorMessage(error));
     }
   }
 
@@ -244,8 +262,8 @@ export function RewardExperience() {
             {isConfirming ? 'Confirming...' : hasClaimed ? 'Reward Claimed' : isConnected ? 'Claim Onchain' : 'Connect to Claim'}
           </button>
 
-          <p className="status">
-            <strong>Status:</strong> {message}
+          <p className="status" title={message}>
+            <strong>Status:</strong> <span>{message}</span>
           </p>
         </div>
       </section>
