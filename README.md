@@ -26,3 +26,13 @@ The interface is English-only and centered on the daily Spark claim flow.
 - Interface style: mobile-first
 
 ## Features
+
+- Mobile-first mini app experience
+- One primary claim action
+- Daily Spark reward flow
+- Direct Wagmi wallet configuration
+- Explicit wallet picker
+- User-controlled wallet connection and disconnection
+- Base attribution metadata included
+- Contract configuration centralized in the front end
+- English-only interface
