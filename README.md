@@ -36,3 +36,11 @@ The interface is English-only and centered on the daily Spark claim flow.
 - Base attribution metadata included
 - Contract configuration centralized in the front end
 - English-only interface
+
+## Wallet Support
+
+The app does not use RainbowKit or WalletConnect.
+
+Wallet support is configured directly through Wagmi.
+
+The configured connectors are:
