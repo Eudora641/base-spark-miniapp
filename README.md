@@ -111,3 +111,12 @@ The app runs locally at:
 ```bash
 http://localhost:3006
 ```
+
+Open that URL in a browser to test the mini app during development.
+
+## Build
+
+Create a production build with:
+
+```bash
+npm run build
