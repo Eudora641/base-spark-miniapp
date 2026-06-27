@@ -91,3 +91,13 @@ NEXT_PUBLIC_APP_URL=https://your-vercel-domain.vercel.app
 Use the deployed app URL for `NEXT_PUBLIC_APP_URL` when deploying.
 
 For local development, set values appropriate for your environment.
+
+## Local Development
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
