@@ -157,3 +157,13 @@ Keep the builder code in `lib/wagmi.ts` aligned with the verified base.dev app r
 Confirm that `app/layout.tsx` contains the correct Base app metadata.
 
 Confirm that all contract write calls pass `dataSuffix: ATTRIBUTION_DATA_SUFFIX`.
+
+## Suggested Development Checklist
+
+- Install dependencies with `npm install`
+- Add required environment variables
+- Start the app with `npm run dev`
+- Connect a supported wallet
+- Verify the wallet picker behavior
+- Test the daily Spark claim flow
+- Confirm that the reward appears after the transaction is submitted
