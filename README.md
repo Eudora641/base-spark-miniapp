@@ -7,3 +7,13 @@ The app focuses on a single primary action: users connect a wallet and claim a d
 ## Overview
 
 Base Spark is designed to be simple, fast, and clear on mobile devices.
+
+Users tap one main button to claim a visible reward called a Spark.
+
+The reward is shown after the connected wallet signs and submits the smart contract transaction.
+
+The interface is English-only and centered on the daily Spark claim flow.
+
+## Project Details
+
+- Project name: `base-spark-miniapp`
