@@ -139,3 +139,11 @@ contracts/BaseSparkReward.sol
 ```
 
 The front-end ABI is located at:
+
+```text
+lib/contract.ts
+```
+
+If the contract changes, keep the front-end ABI, function names, and parameters aligned with the deployed contract.
+
+## Deployment Notes
