@@ -44,3 +44,12 @@ The app does not use RainbowKit or WalletConnect.
 Wallet support is configured directly through Wagmi.
 
 The configured connectors are:
+
+- `injected()` for Base App, MetaMask, OKX, and browser-injected wallets
+- `coinbaseWallet()` for Coinbase Wallet
+
+The wallet button opens a direct wallet picker.
+
+Smart wallets are not selected automatically.
+
+Users choose their preferred wallet and can disconnect it from the interface.
