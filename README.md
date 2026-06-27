@@ -147,3 +147,13 @@ lib/contract.ts
 If the contract changes, keep the front-end ABI, function names, and parameters aligned with the deployed contract.
 
 ## Deployment Notes
+
+Before deploying, confirm that the environment variables are set correctly.
+
+Make sure the contract address matches the intended Base deployment.
+
+Keep the builder code in `lib/wagmi.ts` aligned with the verified base.dev app registration.
+
+Confirm that `app/layout.tsx` contains the correct Base app metadata.
+
+Confirm that all contract write calls pass `dataSuffix: ATTRIBUTION_DATA_SUFFIX`.
