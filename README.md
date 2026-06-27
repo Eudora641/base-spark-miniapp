@@ -177,3 +177,12 @@ Clone the repository with:
 
 ```bash
 git clone https://github.com/Eudora641/base-spark-miniapp.git
+```
+
+Then enter the project directory:
+
+```bash
+cd base-spark-miniapp
+```
+
+Install dependencies and start the local development server to begin working on the app.
