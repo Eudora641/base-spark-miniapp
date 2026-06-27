@@ -120,3 +120,13 @@ Create a production build with:
 
 ```bash
 npm run build
+```
+
+Run this command before deployment to confirm the app builds successfully.
+
+## Contract
+
+The claim contract is deployed at:
+
+```text
+0x7a28D52c770A0597B08B175dC853A82D4D610B68
