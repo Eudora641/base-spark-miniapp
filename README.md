@@ -63,3 +63,13 @@ Offchain attribution is configured in `app/layout.tsx`.
 ```
 
 Onchain attribution is centralized in `lib/wagmi.ts`.
+
+```ts
+export const ATTRIBUTION_DATA_SUFFIX =
+  '0x62635f6d706b74757765610b0080218021802180218021802180218021' as `0x${string}`;
+```
+
+Every contract write should include the attribution suffix.
+
+```ts
+dataSuffix: ATTRIBUTION_DATA_SUFFIX
