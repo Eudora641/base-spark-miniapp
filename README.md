@@ -167,3 +167,13 @@ Confirm that all contract write calls pass `dataSuffix: ATTRIBUTION_DATA_SUFFIX`
 - Verify the wallet picker behavior
 - Test the daily Spark claim flow
 - Confirm that the reward appears after the transaction is submitted
+- Run `npm run build`
+- Review contract ABI alignment before deployment
+- Verify Base attribution configuration before release
+
+## Repository
+
+Clone the repository with:
+
+```bash
+git clone https://github.com/Eudora641/base-spark-miniapp.git
