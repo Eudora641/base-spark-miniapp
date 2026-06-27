@@ -17,3 +17,12 @@ The interface is English-only and centered on the daily Spark claim flow.
 ## Project Details
 
 - Project name: `base-spark-miniapp`
+- Repository: `https://github.com/Eudora641/base-spark-miniapp.git`
+- Framework: Next.js
+- Language: TypeScript
+- Router: App Router
+- Web3 libraries: Wagmi and Viem
+- Target network: Base
+- Interface style: mobile-first
+
+## Features
