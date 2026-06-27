@@ -101,3 +101,13 @@ npm install
 ```
 
 Start the development server:
+
+```bash
+npm run dev
+```
+
+The app runs locally at:
+
+```bash
+http://localhost:3006
+```
