@@ -7,3 +7,14 @@ The app is focused on one primary action: connecting a wallet and claiming a dai
 ## Overview
 
 Base Spark is designed to be simple, fast, and easy to use on mobile devices.
+
+The interface centers on a single claim flow. A user connects a supported wallet, taps the main claim button, and submits the transaction through the connected wallet.
+
+After the transaction is submitted, the app displays the Spark reward.
+
+The app uses an English-only interface and is intentionally focused on the daily Spark experience.
+
+## Project Details
+
+- Project name: `base-spark-miniapp`
+- Repository: `https://github.com/Eudora641/base-spark-miniapp.git`
