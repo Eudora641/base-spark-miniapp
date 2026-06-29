@@ -131,3 +131,14 @@ Open that URL in a browser to test the mini app during development.
 1. Start the app locally or open the deployed app.
 2. Connect a supported wallet.
 3. Choose the wallet from the wallet picker.
+4. Tap the main claim button.
+5. Review and submit the contract transaction in the wallet.
+6. Return to the app to view the Spark reward state.
+
+## Build
+
+Create a production build with:
+
+```bash
+npm run build
+```
