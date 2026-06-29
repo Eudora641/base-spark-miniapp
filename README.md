@@ -89,3 +89,13 @@ NEXT_PUBLIC_APP_URL=https://your-vercel-domain.vercel.app
 ```
 
 Use the deployed app URL for `NEXT_PUBLIC_APP_URL` when deploying.
+
+For local development, set values that match your local environment.
+
+## Local Development
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Eudora641/base-spark-miniapp.git
+```
