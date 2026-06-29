@@ -70,3 +70,13 @@ export const ATTRIBUTION_DATA_SUFFIX =
 ```
 
 Every contract write should include the attribution suffix.
+
+```ts
+dataSuffix: ATTRIBUTION_DATA_SUFFIX
+```
+
+The current builder code is `bc_mpktuwea`.
+
+This suffix is passed with contract write calls so activity can appear in the base.dev Dashboard after users interact with the claim contract.
+
+## Environment Variables
