@@ -29,3 +29,12 @@ The app uses an English-only interface and is intentionally focused on the daily
 
 - Mobile-first mini app experience
 - Clear single-action claim flow
+- Daily Spark reward interaction
+- Direct Wagmi wallet configuration
+- Explicit wallet picker
+- Wallet connection and disconnection controls
+- Base attribution metadata
+- Centralized contract configuration in the front end
+- English-only interface
+
+## Wallet Support
