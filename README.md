@@ -121,3 +121,13 @@ npm run dev
 The app runs locally at:
 
 ```bash
+http://localhost:3006
+```
+
+Open that URL in a browser to test the mini app during development.
+
+## Usage
+
+1. Start the app locally or open the deployed app.
+2. Connect a supported wallet.
+3. Choose the wallet from the wallet picker.
