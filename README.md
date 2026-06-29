@@ -182,3 +182,14 @@ Confirm that all contract write calls pass `dataSuffix: ATTRIBUTION_DATA_SUFFIX`
 ## Suggested Development Checklist
 
 - Install dependencies with `npm install`
+- Add the required environment variables
+- Start the app with `npm run dev`
+- Open the local development URL
+- Connect a supported wallet
+- Verify the wallet picker behavior
+- Test wallet disconnection
+- Test the daily Spark claim flow
+- Confirm that the reward appears after the transaction is submitted
+- Run `npm run build`
+- Review contract ABI alignment before deployment
+- Verify Base attribution configuration before release
