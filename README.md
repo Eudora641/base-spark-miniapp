@@ -49,3 +49,14 @@ The configured connectors are:
 - `coinbaseWallet()` for Coinbase Wallet
 
 The wallet button opens a direct wallet picker.
+
+Smart wallets are not selected automatically.
+
+Users choose their preferred wallet and can disconnect it from the interface.
+
+## Attribution
+
+Offchain attribution is configured in `app/layout.tsx`.
+
+```tsx
+<meta name="base:app_id" content="6a212d621bf1ab98bb37b99d" />
