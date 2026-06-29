@@ -193,3 +193,13 @@ Confirm that all contract write calls pass `dataSuffix: ATTRIBUTION_DATA_SUFFIX`
 - Run `npm run build`
 - Review contract ABI alignment before deployment
 - Verify Base attribution configuration before release
+
+## Notes
+
+This project is intentionally scoped around the daily Spark claim flow.
+
+Keep the interface simple and mobile-friendly when making changes.
+
+When updating contract behavior, update the front-end contract configuration at the same time.
+
+When deploying, verify both the app URL and contract address before release.
