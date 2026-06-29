@@ -80,3 +80,12 @@ The current builder code is `bc_mpktuwea`.
 This suffix is passed with contract write calls so activity can appear in the base.dev Dashboard after users interact with the claim contract.
 
 ## Environment Variables
+
+Create a local environment file and provide the following values:
+
+```bash
+NEXT_PUBLIC_CONTRACT_ADDRESS=0x7a28D52c770A0597B08B175dC853A82D4D610B68
+NEXT_PUBLIC_APP_URL=https://your-vercel-domain.vercel.app
+```
+
+Use the deployed app URL for `NEXT_PUBLIC_APP_URL` when deploying.
