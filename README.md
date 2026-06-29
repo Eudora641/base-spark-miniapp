@@ -38,3 +38,14 @@ The app uses an English-only interface and is intentionally focused on the daily
 - English-only interface
 
 ## Wallet Support
+
+The app does not use RainbowKit or WalletConnect.
+
+Wallet support is configured directly through Wagmi.
+
+The configured connectors are:
+
+- `injected()` for Base App, MetaMask, OKX, and browser-injected wallets
+- `coinbaseWallet()` for Coinbase Wallet
+
+The wallet button opens a direct wallet picker.
