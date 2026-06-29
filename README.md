@@ -99,3 +99,15 @@ Clone the repository:
 ```bash
 git clone https://github.com/Eudora641/base-spark-miniapp.git
 ```
+
+Enter the project directory:
+
+```bash
+cd base-spark-miniapp
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
